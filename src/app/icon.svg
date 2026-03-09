@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Black background -->
+  <rect width="32" height="32" fill="#000000"/>
+
+  <!-- Outer border — faint green -->
+  <rect x="1" y="1" width="30" height="30" fill="none" stroke="#003300" stroke-width="1"/>
+
+  <!-- Broken square / glitch frame — top-left and bottom-right missing -->
+  <polyline points="12,4 4,4 4,12" fill="none" stroke="#ff0033" stroke-width="2" stroke-linecap="square"/>
+  <polyline points="20,28 28,28 28,20" fill="none" stroke="#ff0033" stroke-width="2" stroke-linecap="square"/>
+
+  <!-- Center "!" -->
+  <rect x="15" y="10" width="2" height="8" fill="#00ff55"/>
+  <rect x="15" y="21" width="2" height="2" fill="#00ff55"/>
+</svg>
