@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ERROR_404: WORLD NOT FOUND
 
-## Getting Started
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
-First, run the development server:
+An interactive 3D portfolio built as a broken world that needs to be repaired.
+
+
+## Concept
+
+The world starts corrupted at 0% integrity. Four zones are offline. The visitor must click each zone to repair it, progressively restoring the world and revealing portfolio content — about, experience, skills, and contact.
+
+Fully repairing the world unlocks a hidden easter egg.
+
+## Tech Stack
+
+- **Next.js 16** — App Router, SSR-safe dynamic imports
+- **React Three Fiber** — 3D scene rendering
+- **Three.js** — Geometry, materials, lighting
+- **@react-three/drei** — OrbitControls, Stars, Text, Float, Line
+- **@react-three/postprocessing** — Bloom, Glitch, ChromaticAberration, Noise, Vignette
+- **Zustand** — Global state (integrity, zones, easter egg)
+- **Web Audio API** — Procedural background music with glitch interruptions
+- **Tailwind CSS v4** — UI styling
+
+## Features
+
+- Boot sequence terminal on load
+- 4 repairable zones in a cross layout (Origin, Workshop, Grid, Signal)
+- 3 randomized glitch types: Tear, Split, Static — scale with world corruption
+- Background ambient music with glitch-sync audio interruptions
+- Repair flash effect (zone-colored screen flash on repair)
+- 100% restoration cinematic sequence
+- Hidden artifact easter egg (visible only at full integrity)
+- Cursor pixel trail
+- Fully responsive — mobile camera zoom, touch-friendly UI
+- GPU-optimized: DPR cap, no shadows, postprocessing MSAA disabled
+
+## Run Locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/              # Next.js app router
+  components/
+    scene/          # R3F 3D world, zones, effects
+    ui/             # HUD, BootSequence, StartScreen
+    overlays/       # ZonePanel, EasterEggPanel, RestorationCinematic
+  data/             # content.ts — all text, portfolio data, UI strings
+  store/            # Zustand world state
+public/
+  audio/            # Background music
+```
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+Optimized for [Vercel](https://vercel.com). Push to GitHub and import the repo.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*Built and vibe-coded by Elie Attieh*
