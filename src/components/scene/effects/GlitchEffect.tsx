@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   EffectComposer,
   Glitch,
@@ -48,26 +48,22 @@ function useGlitchAudio(
   onGlitch: (durationSec: number) => void,
 ) {
   const graphRef = useRef<ReturnType<typeof createAudioGraph> | null>(null);
-  const musicSourceRef = useRef<AudioBufferSourceNode | null>(null);
-  const loadedRef = useRef(false);
+  const audioElRef = useRef<HTMLAudioElement | null>(null);
   const startedRef = useRef(false);
 
-  // Init audio + load music on first call
-  const ensureReady = useCallback(async () => {
+  // Init audio graph + HTML audio element (streams — no waiting for full download)
+  const ensureReady = useCallback(() => {
     if (graphRef.current) return graphRef.current;
     const graph = createAudioGraph();
     graphRef.current = graph;
 
-    const res = await fetch("/audio/deep-space.mp3");
-    const raw = await res.arrayBuffer();
-    const audioBuf = await graph.ctx.decodeAudioData(raw);
+    const el = new Audio("/audio/deep-space.mp3");
+    el.loop = true;
+    el.preload = "none"; // don't preload — stream on play
+    audioElRef.current = el;
 
-    const src = graph.ctx.createBufferSource();
-    src.buffer = audioBuf;
-    src.loop = true;
+    const src = graph.ctx.createMediaElementSource(el);
     src.connect(graph.musicGain);
-    musicSourceRef.current = src;
-    loadedRef.current = true;
 
     return graph;
   }, []);
@@ -76,14 +72,12 @@ function useGlitchAudio(
   // so the page has sticky activation and AudioContext can be created freely.
   useEffect(() => {
     if (startedRef.current) return;
-    (async () => {
-      const graph = await ensureReady();
-      if (graph.ctx.state === "suspended") await graph.ctx.resume();
-      if (!startedRef.current && musicSourceRef.current) {
-        musicSourceRef.current.start(0);
-        startedRef.current = true;
-      }
-    })();
+    const graph = ensureReady();
+    if (graph.ctx.state === "suspended") graph.ctx.resume();
+    if (audioElRef.current && !startedRef.current) {
+      audioElRef.current.play().catch(() => {});
+      startedRef.current = true;
+    }
   }, [ensureReady]);
 
   // Fade music volume with integrity
