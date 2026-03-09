@@ -14,10 +14,9 @@ interface Props {
 export default function GridZone({ position }: Props) {
   const groupRef = useRef<THREE.Group>(null);
   const repaired = useWorldStore((s) => s.repairedZones.has("grid"));
-  const repairZone = useWorldStore((s) => s.repairZone);
   const setActiveZone = useWorldStore((s) => s.setActiveZone);
+  const openRepairTerminal = useWorldStore((s) => s.openRepairTerminal);
   const [hovered, setHovered] = useState(false);
-  const [repairing, setRepairing] = useState(false);
 
   const nodes = useMemo(() => {
     const arr: [number, number, number][] = [];
@@ -27,7 +26,6 @@ export default function GridZone({ position }: Props) {
     return arr;
   }, []);
 
-  // Connections: horizontal + vertical neighbours
   const edges = useMemo(() => {
     const result: [[number,number,number],[number,number,number]][] = [];
     for (let x = -1; x <= 1; x++) {
@@ -51,10 +49,7 @@ export default function GridZone({ position }: Props) {
 
   const handleClick = () => {
     if (repaired) { setActiveZone("grid"); return; }
-    if (!repairing) {
-      setRepairing(true);
-      setTimeout(() => repairZone("grid"), 1800);
-    }
+    openRepairTerminal("grid");
   };
 
   const color = repaired ? "#00ccff" : hovered ? "#0066ff" : "#ff0066";
@@ -65,7 +60,6 @@ export default function GridZone({ position }: Props) {
         {/* Nodes */}
         {nodes.map((pos, i) => (
           <group key={i} position={pos}>
-            {/* Wireframe shell */}
             <mesh>
               <sphereGeometry args={[repaired ? 0.14 : 0.12, repaired ? 6 : 4, repaired ? 6 : 4]} />
               <meshStandardMaterial
@@ -75,7 +69,6 @@ export default function GridZone({ position }: Props) {
                 wireframe={!repaired && i % 3 === 0}
               />
             </mesh>
-            {/* Inner glow */}
             {repaired && (
               <mesh scale={0.7}>
                 <sphereGeometry args={[0.14, 6, 6]} />
@@ -85,7 +78,6 @@ export default function GridZone({ position }: Props) {
           </group>
         ))}
 
-        {/* Connection lines — repaired only */}
         {repaired && edges.map((edge, i) => (
           <Line
             key={i}
@@ -105,7 +97,7 @@ export default function GridZone({ position }: Props) {
       </group>
 
       <Text position={[0, -1.8, 0]} fontSize={0.25} color={repaired ? "#00ccff" : "#ff3333"} anchorX="center">
-        {repaired ? UI_TEXT.zoneLabels.grid.restored : repairing ? UI_TEXT.zoneLabels.grid.repairing : UI_TEXT.zoneLabels.grid.broken}
+        {repaired ? UI_TEXT.zoneLabels.grid.restored : UI_TEXT.zoneLabels.grid.broken}
       </Text>
     </group>
   );

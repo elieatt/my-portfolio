@@ -31,10 +31,9 @@ function GlowCube({ x, color, repaired }: { x: number; color: string; repaired: 
 export default function WorkshopZone({ position }: Props) {
   const groupRef = useRef<THREE.Group>(null);
   const repaired = useWorldStore((s) => s.repairedZones.has("workshop"));
-  const repairZone = useWorldStore((s) => s.repairZone);
   const setActiveZone = useWorldStore((s) => s.setActiveZone);
+  const openRepairTerminal = useWorldStore((s) => s.openRepairTerminal);
   const [hovered, setHovered] = useState(false);
-  const [repairing, setRepairing] = useState(false);
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
@@ -42,16 +41,13 @@ export default function WorkshopZone({ position }: Props) {
       groupRef.current.rotation.y += delta * 0.5;
       groupRef.current.rotation.x += delta * 0.15;
     } else {
-      groupRef.current.rotation.y += delta * (repairing ? 1.5 : 0.6);
+      groupRef.current.rotation.y += delta * 0.6;
     }
   });
 
   const handleClick = () => {
     if (repaired) { setActiveZone("workshop"); return; }
-    if (!repairing) {
-      setRepairing(true);
-      setTimeout(() => repairZone("workshop"), 1800);
-    }
+    openRepairTerminal("workshop");
   };
 
   const color = repaired ? "#ff8800" : hovered ? "#ff6600" : "#ff2200";
@@ -77,7 +73,7 @@ export default function WorkshopZone({ position }: Props) {
       </Float>
 
       <Text position={[0, -1.8, 0]} fontSize={0.25} color={repaired ? "#ff8800" : "#ff3333"} anchorX="center">
-        {repaired ? UI_TEXT.zoneLabels.workshop.restored : repairing ? UI_TEXT.zoneLabels.workshop.repairing : UI_TEXT.zoneLabels.workshop.broken}
+        {repaired ? UI_TEXT.zoneLabels.workshop.restored : UI_TEXT.zoneLabels.workshop.broken}
       </Text>
     </group>
   );

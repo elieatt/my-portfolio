@@ -9,6 +9,7 @@ interface WorldState {
   integrity: number; // 0-100
   easterEggFound: boolean;
   lastRepaired: ZoneId | null;
+  pendingRepair: ZoneId | null;
 
   startGame: () => void;
   setBootDone: () => void;
@@ -16,6 +17,8 @@ interface WorldState {
   clearLastRepaired: () => void;
   setActiveZone: (id: ZoneId | null) => void;
   findEasterEgg: () => void;
+  openRepairTerminal: (id: ZoneId) => void;
+  closeRepairTerminal: () => void;
 }
 
 export const useWorldStore = create<WorldState>((set) => ({
@@ -26,6 +29,7 @@ export const useWorldStore = create<WorldState>((set) => ({
   integrity: 0,
   easterEggFound: false,
   lastRepaired: null,
+  pendingRepair: null,
 
   startGame: () => set({ gameStarted: true }),
   setBootDone: () => set({ bootDone: true }),
@@ -44,4 +48,6 @@ export const useWorldStore = create<WorldState>((set) => ({
   clearLastRepaired: () => set({ lastRepaired: null }),
   setActiveZone: (id) => set({ activeZone: id }),
   findEasterEgg: () => set({ easterEggFound: true }),
+  openRepairTerminal: (id) => set({ pendingRepair: id }),
+  closeRepairTerminal: () => set({ pendingRepair: null }),
 }));

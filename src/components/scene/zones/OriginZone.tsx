@@ -15,17 +15,12 @@ export default function OriginZone({ position }: Props) {
   const meshRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
   const repaired = useWorldStore((s) => s.repairedZones.has("origin"));
-  const repairZone = useWorldStore((s) => s.repairZone);
   const setActiveZone = useWorldStore((s) => s.setActiveZone);
+  const openRepairTerminal = useWorldStore((s) => s.openRepairTerminal);
   const [hovered, setHovered] = useState(false);
-  const [repairing, setRepairing] = useState(false);
-  const [repairProgress, setRepairProgress] = useState(0);
 
   useFrame((state, delta) => {
     if (!meshRef.current) return;
-    if (repairing && repairProgress < 1) {
-      setRepairProgress((p) => Math.min(p + delta * 0.6, 1));
-    }
     meshRef.current.rotation.y += delta * (repaired ? 0.15 : 0.4);
     meshRef.current.rotation.x += delta * (repaired ? 0.07 : 0.2);
     if (ringRef.current && repaired) {
@@ -36,17 +31,10 @@ export default function OriginZone({ position }: Props) {
 
   const handleClick = () => {
     if (repaired) { setActiveZone("origin"); return; }
-    if (!repairing) {
-      setRepairing(true);
-      setTimeout(() => repairZone("origin"), 1800);
-    }
+    openRepairTerminal("origin");
   };
 
-  const color = repaired
-    ? "#00ffcc"
-    : repairing
-    ? new THREE.Color().lerpColors(new THREE.Color("#ff0000"), new THREE.Color("#00ffcc"), repairProgress).getStyle()
-    : hovered ? "#ff4444" : "#ff0000";
+  const color = repaired ? "#00ffcc" : hovered ? "#ff4444" : "#ff0000";
 
   return (
     <group position={position}>
@@ -77,7 +65,7 @@ export default function OriginZone({ position }: Props) {
       </Float>
 
       <Text position={[0, -1.8, 0]} fontSize={0.25} color={repaired ? "#00ffcc" : "#ff3333"} anchorX="center">
-        {repaired ? UI_TEXT.zoneLabels.origin.restored : repairing ? UI_TEXT.zoneLabels.origin.repairing : UI_TEXT.zoneLabels.origin.broken}
+        {repaired ? UI_TEXT.zoneLabels.origin.restored : UI_TEXT.zoneLabels.origin.broken}
       </Text>
     </group>
   );

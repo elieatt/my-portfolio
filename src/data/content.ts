@@ -76,30 +76,35 @@ export const UI_TEXT = {
 
   hints: {
     desktop: "DRAG TO ORBIT · SCROLL TO ZOOM · CLICK OBJECTS TO REPAIR",
-    mobile: "DRAG TO ORBIT · PINCH TO ZOOM · TAP TO REPAIR",
+    mobile: "DRAG TO ORBIT · PINCH TO ZOOM · TAP OBJECTS TO REPAIR",
   },
 
   zoneLabels: {
     origin: {
       restored: "[ORIGIN — RESTORED]",
-      repairing: "[REPAIRING...]",
       broken: "[ORIGIN — CLICK TO REPAIR]",
     },
     workshop: {
       restored: "[WORKSHOP — RESTORED]",
-      repairing: "[REPAIRING...]",
       broken: "[WORKSHOP — CLICK TO REPAIR]",
     },
     grid: {
       restored: "[THE GRID — RESTORED]",
-      repairing: "[REPAIRING...]",
       broken: "[THE GRID — CLICK TO REPAIR]",
     },
     signal: {
       restored: "[SIGNAL — RESTORED]",
-      repairing: "[REPAIRING...]",
       broken: "[SIGNAL — CLICK TO REPAIR]",
     },
+  },
+
+  repairTerminal: {
+    header: "REPAIR TERMINAL",
+    cancel: "[×]",
+    executeBtn: "[ EXECUTE ]",
+    executing: "> EXECUTING REPAIR...",
+    initiated: "> REPAIR SEQUENCE INITIATED...",
+    errorMsg: (zone: string) => `> ERROR: unknown command. Try: repair ${zone}`,
   },
 
   easterEgg: {

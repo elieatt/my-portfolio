@@ -34,10 +34,9 @@ function SignalRing({ color, phase }: { color: string; phase: number }) {
 export default function SignalZone({ position }: Props) {
   const dishRef = useRef<THREE.Mesh>(null);
   const repaired = useWorldStore((s) => s.repairedZones.has("signal"));
-  const repairZone = useWorldStore((s) => s.repairZone);
   const setActiveZone = useWorldStore((s) => s.setActiveZone);
+  const openRepairTerminal = useWorldStore((s) => s.openRepairTerminal);
   const [hovered, setHovered] = useState(false);
-  const [repairing, setRepairing] = useState(false);
 
   useFrame((state, delta) => {
     if (!dishRef.current) return;
@@ -51,10 +50,7 @@ export default function SignalZone({ position }: Props) {
 
   const handleClick = () => {
     if (repaired) { setActiveZone("signal"); return; }
-    if (!repairing) {
-      setRepairing(true);
-      setTimeout(() => repairZone("signal"), 1800);
-    }
+    openRepairTerminal("signal");
   };
 
   const color = repaired ? "#cc00ff" : hovered ? "#8800dd" : "#ff0033";
@@ -74,7 +70,6 @@ export default function SignalZone({ position }: Props) {
           />
         </mesh>
 
-        {/* Inner transparent glow */}
         {repaired && (
           <mesh scale={0.88}>
             <coneGeometry args={[0.8, 1.2, 16, 1, true]} />
@@ -82,14 +77,13 @@ export default function SignalZone({ position }: Props) {
           </mesh>
         )}
 
-        {/* 3 staggered expanding rings */}
         {repaired && <SignalRing color={color} phase={1.0} />}
         {repaired && <SignalRing color={color} phase={2.2} />}
         {repaired && <SignalRing color={color} phase={3.0} />}
       </group>
 
       <Text position={[0, -1.8, 0]} fontSize={0.25} color={repaired ? "#cc00ff" : "#ff3333"} anchorX="center">
-        {repaired ? UI_TEXT.zoneLabels.signal.restored : repairing ? UI_TEXT.zoneLabels.signal.repairing : UI_TEXT.zoneLabels.signal.broken}
+        {repaired ? UI_TEXT.zoneLabels.signal.restored : UI_TEXT.zoneLabels.signal.broken}
       </Text>
     </group>
   );
