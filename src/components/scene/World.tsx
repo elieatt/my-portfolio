@@ -58,7 +58,7 @@ export default function World() {
   return (
     <Canvas
       camera={{ position: [0, 2, 12], fov: 60 }}
-      gl={{ antialias: false, powerPreference: "high-performance" }}
+      gl={{ antialias: false, alpha: false }}
       dpr={[1, 1.5]}
       performance={{ min: 0.5 }}
       style={{ background: "#000000" }}

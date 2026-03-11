@@ -15,7 +15,7 @@ export default function HUD() {
         <span className="tracking-widest sm:hidden">{UI_TEXT.titleShort}</span>
         <div className="flex items-center gap-2 md:gap-4">
           <span>
-            INT:{" "}
+            {UI_TEXT.hud.signal}{" "}
             <span
               className={
                 integrity === 100
@@ -51,7 +51,7 @@ export default function HUD() {
               }`}
             >
               <span className="hidden sm:inline">{zone.label} </span>
-              {repaired ? "[OK]" : "[ERR]"}
+              {repaired ? UI_TEXT.hud.ok : UI_TEXT.hud.err}
             </div>
           );
         })}

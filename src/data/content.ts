@@ -57,102 +57,108 @@ export const PORTFOLIO_CONTENT = {
 };
 
 export const UI_TEXT = {
-  title: "ERROR_404: WORLD NOT FOUND",
-  titleShort: "ERR_404",
-  titleBanner: "ERROR_404: WORLD NOT FOUND — v0.0.1",
+  title: "TRANSMISSION FROM: ELIE ATTIEH",
+  titleShort: "TX:EA",
+  titleBanner: "TRANSMISSION FROM: ELIE ATTIEH — v0.0.1",
 
   startScreen: {
-    alert: "⚠ SYSTEM FAILURE DETECTED ⚠",
-    heading: "ERROR_404",
-    subheading: "WORLD NOT FOUND",
+    alert: "⚠ INCOMING TRANSMISSION DETECTED ⚠",
+    heading: "TRANSMISSION",
+    subheading: "FROM: ELIE ATTIEH",
     statusLines: [
-      { level: "CRITICAL" as const, message: "Reality subsystem offline" },
-      { level: "CRITICAL" as const, message: "World integrity at 0%" },
-      { level: "PENDING" as const, message: "Awaiting operator authorization" },
+      { level: "CRITICAL" as const, message: "Signal fragmented across 4 nodes" },
+      { level: "CRITICAL" as const, message: "Reception strength: 0%" },
+      { level: "PENDING" as const, message: "Awaiting receiver authorization" },
     ],
-    button: "[ INITIATE REPAIR SEQUENCE ]",
-    footer: "v0.0.1 — EMERGENCY REPAIR TERMINAL",
+    button: "[ RECEIVE TRANSMISSION ]",
+    footer: "v0.0.1 — SIGNAL RECEIVER TERMINAL",
   },
 
   hints: {
-    desktop: "DRAG TO ORBIT · SCROLL TO ZOOM · CLICK OBJECTS TO REPAIR",
-    mobile: "DRAG TO ORBIT · PINCH TO ZOOM · TAP OBJECTS TO REPAIR",
+    desktop: "DRAG TO ORBIT · SCROLL TO ZOOM · CLICK NODES TO TUNE",
+    mobile: "DRAG TO ORBIT · PINCH TO ZOOM · TAP NODES TO TUNE",
   },
 
   zoneLabels: {
     origin: {
-      restored: "[ORIGIN — RESTORED]",
-      broken: "[ORIGIN — CLICK TO REPAIR]",
+      restored: "[ORIGIN — SIGNAL LOCKED]",
+      broken: "[ORIGIN — CLICK TO TUNE]",
     },
     workshop: {
-      restored: "[WORKSHOP — RESTORED]",
-      broken: "[WORKSHOP — CLICK TO REPAIR]",
+      restored: "[WORKSHOP — SIGNAL LOCKED]",
+      broken: "[WORKSHOP — CLICK TO TUNE]",
     },
     grid: {
-      restored: "[THE GRID — RESTORED]",
-      broken: "[THE GRID — CLICK TO REPAIR]",
+      restored: "[THE GRID — SIGNAL LOCKED]",
+      broken: "[THE GRID — CLICK TO TUNE]",
     },
     signal: {
-      restored: "[SIGNAL — RESTORED]",
-      broken: "[SIGNAL — CLICK TO REPAIR]",
+      restored: "[SIGNAL — LOCKED]",
+      broken: "[SIGNAL — CLICK TO TUNE]",
     },
   },
 
   repairTerminal: {
-    header: "REPAIR TERMINAL",
+    header: "TUNING TERMINAL",
     cancel: "[×]",
-    executeBtn: "[ EXECUTE ]",
-    executing: "> EXECUTING REPAIR...",
-    initiated: "> REPAIR SEQUENCE INITIATED...",
-    errorMsg: (zone: string) => `> ERROR: unknown command. Try: repair ${zone}`,
+    executeBtn: "[ LOCK SIGNAL ]",
+    executing: "> LOCKING SIGNAL...",
+    initiated: "> CHANNEL ESTABLISHED...",
+    errorMsg: (zone: string) => `> ERROR: unknown command. Try: tune ${zone}`,
+  },
+
+  hud: {
+    signal: "SIG:",
+    ok: "[RX]",
+    err: "[--]",
   },
 
   easterEgg: {
-    panelHeader: "SECRET TRANSMISSION INTERCEPTED",
-    closeButton: "[CLOSE TRANSMISSION ×]",
+    panelHeader: "ENCRYPTED CHANNEL INTERCEPTED",
+    closeButton: "[CLOSE CHANNEL ×]",
   },
 };
 
 export const RESTORATION_LINES = [
-  "> ALL ZONES REPAIRED",
-  "> RECALIBRATING WORLD MATRIX...",
-  "> WORLD INTEGRITY: 100%",
-  "> REALITY SUBSYSTEM ONLINE",
+  "> ALL NODES TUNED",
+  "> RECONSTRUCTING FULL SIGNAL...",
+  "> RECEPTION STRENGTH: 100%",
+  "> TRANSMISSION CHANNEL STABLE",
   "",
-  "  The broken world is whole again.",
-  "  Four systems. One engineer.",
+  "  You received the full transmission.",
+  "  Four nodes. One engineer.",
   "  This is what I build.",
   "",
-  "> PORTFOLIO TRANSMISSION COMPLETE",
+  "> TRANSMISSION COMPLETE",
   "> — E.A.",
 ];
 
 export const EASTER_EGG_LINES = [
-  "> UNKNOWN SIGNAL DETECTED",
-  "> TRIANGULATING SOURCE...",
+  "> ENCRYPTED CHANNEL DETECTED",
+  "> TRIANGULATING FREQUENCY...",
   "> COORDINATES: 0, -4.2, 0",
-  "> TRANSMISSION DECRYPTED:",
+  "> DECRYPTING...",
   "",
-  "  You looked beneath the broken world.",
-  "  Most people only fix what's visible.",
-  "  You dug deeper.",
+  "  You listened past the noise.",
+  "  Most people tune into what's obvious.",
+  "  You found the hidden frequency.",
   "",
   "  That's the kind of engineer I am.",
   "",
   "> — E.A.",
-  "> [ARTIFACT COLLECTED]",
+  "> [FREQUENCY LOGGED]",
 ];
 
 export const BOOT_LINES = [
-  "> INITIALIZING SYSTEM...",
-  "> SCANNING ENTITY: ELIE ATTIEH",
-  "> ROLE DETECTED: SOFTWARE ENGINEER",
+  "> SIGNAL RECEIVER ONLINE...",
+  "> SCANNING FREQUENCY BANDS...",
+  "> SOURCE IDENTIFIED: ELIE ATTIEH",
+  "> ROLE: SOFTWARE ENGINEER",
   "> UPTIME: 2.5+ YEARS",
   "> ORIGIN: SYRIA → REMOTE/GLOBAL",
-  "> WARNING: WORLD CORRUPTION DETECTED",
-  "> INTEGRITY: 0%",
-  "> INITIATING REPAIR SEQUENCE...",
-  "> AWAITING USER INPUT",
+  "> WARNING: SIGNAL FRAGMENTED ACROSS 4 NODES",
+  "> RECEPTION STRENGTH: 0%",
+  "> AWAITING TUNING SEQUENCE...",
 ];
 
 export const ZONES = [

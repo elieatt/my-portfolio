@@ -5,7 +5,7 @@ import { useWorldStore } from "@/store/worldStore";
 import { UI_TEXT } from "@/data/content";
 import type { ZoneId } from "@/data/content";
 
-const COMMAND = (id: ZoneId) => `repair ${id}`;
+const COMMAND = (id: ZoneId) => `tune ${id}`;
 const TYPEWRITER_MS = 45;
 
 type Line = { text: string; variant: "dim" | "normal" | "error" | "success" };
@@ -14,6 +14,11 @@ export default function RepairTerminal() {
   const pendingRepair = useWorldStore((s) => s.pendingRepair);
   const repairZone = useWorldStore((s) => s.repairZone);
   const closeRepairTerminal = useWorldStore((s) => s.closeRepairTerminal);
+  const integrity = useWorldStore((s) => s.integrity);
+
+  useEffect(() => {
+    if (integrity >= 100) closeRepairTerminal();
+  }, [integrity, closeRepairTerminal]);
 
   const [isMobile, setIsMobile] = useState(false);
   const [input, setInput] = useState("");
@@ -32,14 +37,17 @@ export default function RepairTerminal() {
     if (!pendingRepair) return;
     setInput("");
     setLines([
-      { text: `> ZONE OFFLINE: ${pendingRepair.toUpperCase()}`, variant: "dim" },
-      { text: `> AUTHORIZED COMMAND: repair ${pendingRepair}`, variant: "dim" },
+      {
+        text: `> ZONE OFFLINE: ${pendingRepair.toUpperCase()}`,
+        variant: "dim",
+      },
+      { text: `> AUTHORIZED COMMAND: tune ${pendingRepair}`, variant: "dim" },
     ]);
     setTypewriterText("");
     setTypewriterDone(false);
     setConfirmed(false);
     if (!isMobile) setTimeout(() => inputRef.current?.focus(), 80);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pendingRepair]);
 
   // Mobile typewriter effect
@@ -50,7 +58,10 @@ export default function RepairTerminal() {
     const id = setInterval(() => {
       i++;
       setTypewriterText(cmd.slice(0, i));
-      if (i >= cmd.length) { clearInterval(id); setTypewriterDone(true); }
+      if (i >= cmd.length) {
+        clearInterval(id);
+        setTypewriterDone(true);
+      }
     }, TYPEWRITER_MS);
     return () => clearInterval(id);
   }, [pendingRepair, isMobile, typewriterDone]);
@@ -59,9 +70,11 @@ export default function RepairTerminal() {
 
   const execute = () => {
     if (confirmed) return;
+    const zoneId = pendingRepair; // capture before async
     setConfirmed(true);
-    repairZone(pendingRepair);
-    setTimeout(closeRepairTerminal, 900);
+
+    closeRepairTerminal(); // frame 1: terminal gone
+    setTimeout(() => repairZone(zoneId), 300); // frame 2: flash fires on clear screen
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -78,7 +91,10 @@ export default function RepairTerminal() {
       setLines((prev) => [
         ...prev,
         { text: `> ${trimmed}`, variant: "normal" },
-        { text: UI_TEXT.repairTerminal.errorMsg(pendingRepair), variant: "error" },
+        {
+          text: UI_TEXT.repairTerminal.errorMsg(pendingRepair),
+          variant: "error",
+        },
       ]);
       setInput("");
       setTimeout(() => inputRef.current?.focus(), 0);
@@ -117,10 +133,10 @@ export default function RepairTerminal() {
                 l.variant === "error"
                   ? "text-red-400"
                   : l.variant === "success"
-                  ? "text-green-300"
-                  : l.variant === "dim"
-                  ? "text-green-700"
-                  : "text-green-400"
+                    ? "text-green-300"
+                    : l.variant === "dim"
+                      ? "text-green-700"
+                      : "text-green-400"
               }
             >
               {l.text}

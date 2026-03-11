@@ -89,12 +89,13 @@ export default function GridZone({ position }: Props) {
           />
         ))}
 
-        {/* Invisible click-catcher */}
-        <mesh onClick={handleClick} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
-          <planeGeometry args={[2.4, 2.4]} />
-          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-        </mesh>
       </group>
+
+      {/* Invisible click-catcher — outside rotating group so it always faces the camera */}
+      <mesh onClick={handleClick} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
+        <planeGeometry args={[2.4, 2.4]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} side={THREE.DoubleSide} />
+      </mesh>
 
       <Text position={[0, -1.8, 0]} fontSize={0.25} color={repaired ? "#00ccff" : "#ff3333"} anchorX="center">
         {repaired ? UI_TEXT.zoneLabels.grid.restored : UI_TEXT.zoneLabels.grid.broken}

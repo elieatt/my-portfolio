@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Elie Attieh — Software Engineer",
-  description: "ERROR_404: WORLD NOT FOUND. An interactive 3D portfolio.",
+  description: "TRANSMISSION FROM: ELIE ATTIEH. An interactive 3D portfolio — tune into 4 signal nodes to receive the full broadcast.",
 };
 
 export default function RootLayout({

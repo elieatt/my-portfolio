@@ -8,7 +8,6 @@ import RepairFlash from "@/components/ui/RepairFlash";
 import CursorTrail from "@/components/ui/CursorTrail";
 import ZonePanel from "@/components/overlays/ZonePanel";
 import EasterEggPanel from "@/components/overlays/EasterEggPanel";
-import RestorationCinematic from "@/components/overlays/RestorationCinematic";
 import RepairTerminal from "@/components/overlays/RepairTerminal";
 import { useWorldStore } from "@/store/worldStore";
 import { UI_TEXT } from "@/data/content";
@@ -29,7 +28,6 @@ export default function Home() {
         <>
           <HUD />
           <RepairFlash />
-          <RestorationCinematic />
           <RepairTerminal />
           <ZonePanel />
           <EasterEggPanel />
