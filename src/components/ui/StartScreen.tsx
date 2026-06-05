@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useWorldStore } from "@/store/worldStore";
 import { UI_TEXT } from "@/data/content";
 
@@ -57,16 +58,31 @@ export default function StartScreen() {
           ))}
         </div>
 
-        {/* Start button */}
-        <button
-          onClick={handleStart}
-          className="font-mono text-sm sm:text-base border border-green-500 text-green-400 px-8 py-3 rounded tracking-widest hover:bg-green-950 hover:text-green-300 hover:border-green-400 active:scale-95 transition-all duration-150 cursor-pointer"
-          style={{
-            boxShadow: "0 0 12px rgba(0,255,80,0.15), inset 0 0 12px rgba(0,255,80,0.05)",
-          }}
-        >
-          {UI_TEXT.startScreen.button}
-        </button>
+        {/* Buttons */}
+        <div className="flex flex-col items-center gap-3 w-full">
+          <button
+            onClick={handleStart}
+            className="font-mono text-sm sm:text-base border border-green-500 text-green-400 px-8 py-3 rounded tracking-widest hover:bg-green-950 hover:text-green-300 hover:border-green-400 active:scale-95 transition-all duration-150 cursor-pointer w-full max-w-xs"
+            style={{
+              boxShadow: "0 0 12px rgba(0,255,80,0.15), inset 0 0 12px rgba(0,255,80,0.05)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {UI_TEXT.startScreen.button}
+          </button>
+          <Link
+            href="/plain"
+            className="font-mono text-xs border border-green-900 text-green-800 px-8 py-2 rounded tracking-widest hover:border-green-700 hover:text-green-600 transition-all duration-150 w-full max-w-xs text-center"
+          >
+            {UI_TEXT.startScreen.plainView}
+          </Link>
+          <Link
+            href="/blog"
+            className="font-mono text-xs border border-green-900 text-green-800 px-8 py-2 rounded tracking-widest hover:border-green-700 hover:text-green-600 transition-all duration-150 w-full max-w-xs text-center"
+          >
+            {UI_TEXT.startScreen.blog}
+          </Link>
+        </div>
 
         <p className="font-mono text-green-900 text-xs tracking-wider">
           {UI_TEXT.startScreen.footer}
