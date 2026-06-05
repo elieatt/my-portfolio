@@ -7,6 +7,7 @@ export const PORTFOLIO_CONTENT = {
     email: "elieatteah00.mme@gmail.com",
     linkedin: "https://www.linkedin.com/in/elie-attieh/",
     phone: "+963 932851806",
+    github: "https://github.com/elieatt/",
   },
   languages: [
     { name: "Arabic", level: "NATIVE" },
@@ -66,11 +67,16 @@ export const UI_TEXT = {
     heading: "TRANSMISSION",
     subheading: "FROM: ELIE ATTIEH",
     statusLines: [
-      { level: "CRITICAL" as const, message: "Signal fragmented across 4 nodes" },
+      {
+        level: "CRITICAL" as const,
+        message: "Signal fragmented across 4 nodes",
+      },
       { level: "CRITICAL" as const, message: "Reception strength: 0%" },
       { level: "PENDING" as const, message: "Awaiting receiver authorization" },
     ],
     button: "[ RECEIVE TRANSMISSION ]",
+    plainView: "[ PLAIN VIEW ]",
+    blog: "[ BLOG ]",
     footer: "v0.0.1 — SIGNAL RECEIVER TERMINAL",
   },
 
@@ -116,6 +122,13 @@ export const UI_TEXT = {
   easterEgg: {
     panelHeader: "ENCRYPTED CHANNEL INTERCEPTED",
     closeButton: "[CLOSE CHANNEL ×]",
+  },
+
+  nav: {
+    backToTransmission: "← BACK TO TRANSMISSION",
+    backToLog: "← BACK TO LOG",
+    backToTransmissionShort: "← TRANSMISSION",
+    blogLink: "BLOG →",
   },
 };
 
@@ -169,3 +182,24 @@ export const ZONES = [
 ] as const;
 
 export type ZoneId = (typeof ZONES)[number]["id"];
+
+export const BLOG_TEXT = {
+  layout: {
+    title: "Writing — Elie Attieh",
+    description:
+      "Posts and notes from Elie Attieh — backend engineering, architecture, and more.",
+  },
+  listing: {
+    heading: "WRITING",
+    postCount: (n: number) => `${n} POST${n !== 1 ? "S" : ""}`,
+    empty: "> NO POSTS YET.",
+    footer: "////",
+  },
+  post: {
+    datePrefix: "//",
+    titleTemplate: (title: string) => `${title} — Elie Attieh`,
+  },
+  card: {
+    readLink: "[ READ → ]",
+  },
+};
