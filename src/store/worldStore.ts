@@ -13,6 +13,7 @@ interface WorldState {
 
   startGame: () => void;
   setBootDone: () => void;
+  resetGame: () => void;
   repairZone: (id: ZoneId) => void;
   clearLastRepaired: () => void;
   setActiveZone: (id: ZoneId | null) => void;
@@ -33,6 +34,17 @@ export const useWorldStore = create<WorldState>((set) => ({
 
   startGame: () => set({ gameStarted: true }),
   setBootDone: () => set({ bootDone: true }),
+  resetGame: () =>
+    set({
+      gameStarted: false,
+      bootDone: false,
+      repairedZones: new Set(),
+      activeZone: null,
+      integrity: 0,
+      easterEggFound: false,
+      lastRepaired: null,
+      pendingRepair: null,
+    }),
 
   repairZone: (id) =>
     set((state) => {

@@ -6,13 +6,23 @@ import { ZONES, UI_TEXT } from "@/data/content";
 export default function HUD() {
   const integrity = useWorldStore((s) => s.integrity);
   const repairedZones = useWorldStore((s) => s.repairedZones);
+  const resetGame = useWorldStore((s) => s.resetGame);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-40 pointer-events-none">
       {/* Top bar */}
       <div className="flex items-center justify-between px-3 md:px-6 py-3 bg-black/60 backdrop-blur-sm border-b border-green-900/50 font-mono text-xs text-green-400">
-        <span className="tracking-widest hidden sm:inline">{UI_TEXT.title}</span>
-        <span className="tracking-widest sm:hidden">{UI_TEXT.titleShort}</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={resetGame}
+            className="pointer-events-auto text-green-800 hover:text-green-500 tracking-widest transition-colors duration-150"
+          >
+            {UI_TEXT.hud.exit}
+          </button>
+          <span className="tracking-widest hidden sm:inline text-green-700/50">|</span>
+          <span className="tracking-widest hidden sm:inline">{UI_TEXT.title}</span>
+          <span className="tracking-widest sm:hidden">{UI_TEXT.titleShort}</span>
+        </div>
         <div className="flex items-center gap-2 md:gap-4">
           <span>
             {UI_TEXT.hud.signal}{" "}

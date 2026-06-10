@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useWorldStore } from "@/store/worldStore";
 import { UI_TEXT } from "@/data/content";
@@ -9,6 +9,10 @@ export default function StartScreen() {
   const startGame = useWorldStore((s) => s.startGame);
   const gameStarted = useWorldStore((s) => s.gameStarted);
   const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    if (!gameStarted) setFading(false);
+  }, [gameStarted]);
 
   if (gameStarted) return null;
 

@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default function PlainView() {
-  const { name, role, summary, contact, languages, education, experience, skills } =
+  const { name, role, summary, contact, languages, education, experience, projects, skills } =
     PORTFOLIO_CONTENT;
 
   return (
@@ -59,6 +59,7 @@ export default function PlainView() {
                   </li>
                 ))}
               </ul>
+              <p className="text-gray-600 text-xs pt-0.5">{job.stack.join(" · ")}</p>
             </div>
           ))}
         </section>
@@ -80,6 +81,33 @@ export default function PlainView() {
 
         <hr className="border-green-950" />
 
+        {/* Projects */}
+        <section className="space-y-6">
+          <h2 className="text-green-500 text-xs tracking-widest">PROJECTS</h2>
+          {projects.map((proj) => (
+            <div key={proj.id} className="space-y-2">
+              <a
+                href={proj.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white font-bold hover:text-green-300 transition-colors"
+              >
+                {proj.name}
+              </a>
+              <ul className="space-y-1 pt-1">
+                {proj.highlights.map((h, i) => (
+                  <li key={i} className="text-gray-400 text-sm before:content-['–_'] before:text-green-800">
+                    {h}
+                  </li>
+                ))}
+              </ul>
+              <p className="text-gray-600 text-xs pt-0.5">{proj.stack.join(" · ")}</p>
+            </div>
+          ))}
+        </section>
+
+        <hr className="border-green-950" />
+
         {/* Education */}
         <section className="space-y-2">
           <h2 className="text-green-500 text-xs tracking-widest">EDUCATION</h2>
@@ -87,7 +115,6 @@ export default function PlainView() {
             <span className="text-white text-sm">{education.degree}</span>
             <span className="text-gray-600 text-xs">{education.years}</span>
           </div>
-          <p className="text-gray-400 text-sm">{education.university} — {education.location}</p>
         </section>
 
         <hr className="border-green-950" />

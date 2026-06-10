@@ -78,6 +78,13 @@ function useGlitchAudio(
       audioElRef.current.play().catch(() => {});
       startedRef.current = true;
     }
+    return () => {
+      audioElRef.current?.pause();
+      audioElRef.current = null;
+      graph.ctx.close().catch(() => {});
+      graphRef.current = null;
+      startedRef.current = false;
+    };
   }, [ensureReady]);
 
   // Fade music volume with integrity

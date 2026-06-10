@@ -57,7 +57,6 @@ function OriginContent() {
       <div className="border-t border-green-900 pt-3">
         <div className="text-green-600 text-xs mb-2">[EDUCATION]</div>
         <div>{education.degree}</div>
-        <div className="text-green-600">{education.university}</div>
         <div className="text-green-700 text-xs">{education.years}</div>
       </div>
       <div className="border-t border-green-900 pt-3">
@@ -74,7 +73,7 @@ function OriginContent() {
 }
 
 function WorkshopContent() {
-  const { experience } = PORTFOLIO_CONTENT;
+  const { experience, projects } = PORTFOLIO_CONTENT;
   return (
     <div className="space-y-6 text-sm">
       <div className="text-green-300 text-xs tracking-widest">[EXPERIENCE LOG]</div>
@@ -91,6 +90,41 @@ function WorkshopContent() {
               </li>
             ))}
           </ul>
+          <div className="flex flex-wrap gap-1 pt-1">
+            {job.stack.map((s) => (
+              <span key={s} className="text-xs text-green-800 border border-green-950 px-1.5 py-0.5 rounded">
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div className="text-green-300 text-xs tracking-widest pt-2">[PROJECTS]</div>
+      {projects.map((proj) => (
+        <div key={proj.id} className="border border-green-900/60 p-3 space-y-2">
+          <a
+            href={proj.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-300 font-bold hover:text-green-200 underline underline-offset-2"
+          >
+            {proj.name}
+          </a>
+          <ul className="space-y-1 pt-1">
+            {proj.highlights.map((h, i) => (
+              <li key={i} className="text-green-600 leading-relaxed">
+                <span className="text-green-800 mr-1">›</span>
+                {h}
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-wrap gap-1 pt-1">
+            {proj.stack.map((s) => (
+              <span key={s} className="text-xs text-green-800 border border-green-950 px-1.5 py-0.5 rounded">
+                {s}
+              </span>
+            ))}
+          </div>
         </div>
       ))}
     </div>
