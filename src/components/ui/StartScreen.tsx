@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useWorldStore } from "@/store/worldStore";
-import { UI_TEXT } from "@/data/content";
+import { UI_TEXT, EMULATOR_TEXT } from "@/data/content";
+// Experimental — see components/emulator/config.ts
+import { EMULATOR_ENABLED } from "@/components/emulator/config";
 
 export default function StartScreen() {
   const startGame = useWorldStore((s) => s.startGame);
@@ -88,6 +90,14 @@ export default function StartScreen() {
           >
             {UI_TEXT.startScreen.blog}
           </Link>
+          {EMULATOR_ENABLED && (
+            <Link
+              href="/receiver"
+              className="font-mono text-xs border border-green-900 text-green-800 px-8 py-2 rounded tracking-widest hover:border-green-700 hover:text-green-600 transition-all duration-150 w-full max-w-xs text-center"
+            >
+              {EMULATOR_TEXT.startScreenLink}
+            </Link>
+          )}
         </div>
 
         <p className="font-mono text-green-900 text-xs tracking-wider">
