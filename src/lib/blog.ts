@@ -25,6 +25,24 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   return (data ?? []) as PostMeta[];
 }
 
+export async function getPostsPage(
+  page: number,
+  pageSize: number
+): Promise<{ posts: PostMeta[]; total: number }> {
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, error, count } = await supabase
+    .from("posts")
+    .select("id, title, slug, excerpt, tags, date", { count: "exact" })
+    .eq("published", true)
+    .order("date", { ascending: false })
+    .range(from, to);
+
+  if (error) throw new Error(error.message);
+  return { posts: (data ?? []) as PostMeta[], total: count ?? 0 };
+}
+
 export async function getPostBySlug(slug: string): Promise<Post> {
   const { data, error } = await supabase
     .from("posts")

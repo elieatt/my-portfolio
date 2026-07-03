@@ -1,12 +1,28 @@
 import Link from "next/link";
-import { getAllPosts } from "@/lib/blog";
+import { getPostsPage } from "@/lib/blog";
 import PostCard from "@/components/blog/PostCard";
-import { BLOG_TEXT, UI_TEXT } from "@/data/content";
+import Pagination from "@/components/blog/Pagination";
+import { BLOG_TEXT, UI_TEXT, POSTS_PER_PAGE } from "@/data/content";
 
 export const revalidate = 60;
 
-export default async function BlogPage() {
-  const posts = await getAllPosts();
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const parsed = Number.parseInt(pageParam ?? "1", 10);
+  const requested = Number.isNaN(parsed) || parsed < 1 ? 1 : parsed;
+
+  const first = await getPostsPage(requested, POSTS_PER_PAGE);
+  const total = first.total;
+  const totalPages = Math.max(1, Math.ceil(total / POSTS_PER_PAGE));
+
+  // Out-of-range page (e.g. ?page=999) — clamp to the last page and refetch.
+  const page = Math.min(requested, totalPages);
+  const posts =
+    page === requested ? first.posts : (await getPostsPage(page, POSTS_PER_PAGE)).posts;
 
   return (
     <main className="max-w-2xl mx-auto px-6 py-12 space-y-8">
@@ -20,19 +36,22 @@ export default async function BlogPage() {
       <header className="space-y-1 pt-4">
         <h1 className="text-white text-3xl font-bold tracking-wide">{BLOG_TEXT.listing.heading}</h1>
         <p className="text-gray-600 text-xs tracking-widest">
-          {BLOG_TEXT.listing.postCount(posts.length)}
+          {BLOG_TEXT.listing.postCount(total)}
         </p>
       </header>
 
       <hr className="border-green-950" />
 
-      {posts.length === 0 ? (
+      {total === 0 ? (
         <p className="text-green-800 text-sm tracking-widest py-8">{BLOG_TEXT.listing.empty}</p>
       ) : (
         <div>
-          {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
+          <div>
+            {posts.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </div>
+          <Pagination basePath="/blog" page={page} totalPages={totalPages} variant="terminal" />
         </div>
       )}
 

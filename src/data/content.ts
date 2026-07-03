@@ -223,4 +223,68 @@ export const BLOG_TEXT = {
   card: {
     readLink: "[ READ → ]",
   },
+  pagination: {
+    prev: "[ ← PREV ]",
+    next: "[ NEXT → ]",
+    pageLabel: (current: number, total: number) => `PAGE ${current} / ${total}`,
+  },
+};
+
+export const POSTS_PER_PAGE = 5;
+
+export const CONSOLE_TEXT = {
+  lines: [
+    "  ((( • )))",
+    "     |",
+    "    /|\\",
+    "   / | \\",
+    "  TRANSMISSION FROM: ELIE ATTIEH",
+    "",
+    "  You read consoles. I like you already.",
+    "  This site is hand-built: Next.js, R3F, Zustand, Supabase.",
+    "",
+    "  > try: tune(\"hidden\")",
+  ],
+  devChannelLines: [
+    "> DEV CHANNEL UNLOCKED",
+    "> a fragment is buried beneath the floor of the restored world",
+    "> heading: far corner, below the grid — visible only at 100%",
+    "> some things are only found by people who look under the surface.",
+    "> the receiver hardware itself is reachable: /receiver",
+  ],
+  devChannelReturn: "[ DEV CHANNEL OPEN ]",
+  unknownFreqReturn: "static... try tune(\"hidden\")",
+};
+
+export const FOURTHWALL_TEXT = {
+  tabHiddenTitle: "[ SIGNAL LOST — RETURN ]",
+};
+
+export const NOT_FOUND_TEXT = {
+  alert: "⚠ UNKNOWN FREQUENCY ⚠",
+  lines: [
+    "> FREQUENCY NOT FOUND",
+    "> THE SIGNAL DOES NOT REACH THIS ADDRESS",
+  ],
+  scannedPrefix: "> SCANNED:",
+  homeButton: "[ RETUNE TO KNOWN FREQUENCY ]",
+  blogButton: "[ BROWSE THE LOG ]",
+  plainFallbackTitle: "404 — Page not found",
+  plainFallbackHome: "Go home",
+};
+
+export const EMULATOR_TEXT = {
+  startScreenLink: "[ PHYSICAL RECEIVER ]",
+  pageTitle: "PHYSICAL RECEIVER — EMULATED x86 HARDWARE",
+  statusBooting: "> POWERING PHYSICAL RECEIVER... REAL KERNEL, REAL SHELL",
+  statusOnline: "> MACHINE ONLINE — THIS IS AN ACTUAL COMPUTER. TRY: ls",
+  reset: "[ RESET ]",
+  powerOff: "[ POWER OFF ]",
+  backHome: "[ RETURN TO TRANSMISSION ]",
+  mobileWarning: "> PHYSICAL KEYBOARD REQUIRED — TOUCH INPUT NOT SUPPORTED BY THIS HARDWARE",
+  loadError: "> RECEIVER HARDWARE FAULT — EMULATION UNAVAILABLE ON THIS CHANNEL",
+  offline: {
+    title: "CHANNEL OFFLINE",
+    body: "> THE PHYSICAL RECEIVER IS NOT BROADCASTING",
+  },
 };
