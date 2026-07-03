@@ -16,6 +16,7 @@ import { Vector2 } from "three";
 type GlitchType = "tear" | "split" | "static";
 const GLITCH_TYPES: GlitchType[] = ["tear", "split", "static"];
 import { useWorldStore } from "@/store/worldStore";
+import { UI_TEXT } from "@/data/content";
 
 // ─── Audio setup ────────────────────────────────────────────────────────────
 
@@ -38,7 +39,16 @@ function createAudioGraph() {
   musicGain.gain.value = 1;
   musicGain.connect(musicFilter);
 
-  return { ctx, master, musicFilter, musicGain };
+  // Pre-generated white noise, played as an audible burst during each glitch
+  const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+  const noiseData = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < noiseData.length; i++) noiseData[i] = Math.random() * 2 - 1;
+
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.value = 0;
+  noiseGain.connect(master);
+
+  return { ctx, master, musicFilter, musicGain, noiseBuffer, noiseGain };
 }
 
 // ─── Hook ───────────────────────────────────────────────────────────────────
@@ -97,10 +107,10 @@ function useGlitchAudio(
 
   // Music interruption in sync with visual glitch
   const interrupt = useCallback(
-    (durationSec: number) => {
+    (durationSec: number, type: GlitchType) => {
       const g = graphRef.current;
       if (!g || integrity >= 100) return;
-      const { ctx, musicGain, musicFilter } = g;
+      const { ctx, musicGain, musicFilter, noiseBuffer, noiseGain } = g;
       const now = ctx.currentTime;
 
       // Stutter the music gain
@@ -114,6 +124,53 @@ function useGlitchAudio(
       musicFilter.frequency.cancelScheduledValues(now);
       musicFilter.frequency.setValueAtTime(300 + Math.random() * 400, now);
       musicFilter.frequency.linearRampToValueAtTime(20000, now + durationSec);
+
+      // Type-specific glitch texture — filtered noise, synced to the visual glitch
+      const burst = Math.min(durationSec, 0.45);
+      const src = ctx.createBufferSource();
+      src.buffer = noiseBuffer;
+      src.loop = true;
+      const filter = ctx.createBiquadFilter();
+      src.connect(filter);
+      filter.connect(noiseGain);
+
+      let peak = 0.11;
+      if (type === "static") {
+        // Soft mid-band hiss
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(1300 + Math.random() * 700, now);
+        filter.Q.value = 0.6;
+        peak = 0.11;
+      } else if (type === "tear") {
+        // Low, downward-sweeping rumble
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(1100, now);
+        filter.frequency.exponentialRampToValueAtTime(180, now + burst);
+        filter.Q.value = 0.8;
+        peak = 0.13;
+      } else {
+        // Split — warbling band of noise, no tone
+        filter.type = "bandpass";
+        filter.Q.value = 2.5;
+        const center = 800 + Math.random() * 300;
+        const steps = 6;
+        for (let i = 0; i < steps; i++) {
+          filter.frequency.setValueAtTime(
+            center * (i % 2 === 0 ? 1 : 1.7),
+            now + (burst * i) / steps
+          );
+        }
+        peak = 0.1;
+      }
+
+      // Gentle attack/release so nothing clicks
+      noiseGain.gain.cancelScheduledValues(now);
+      noiseGain.gain.setValueAtTime(0, now);
+      noiseGain.gain.linearRampToValueAtTime(peak, now + 0.03);
+      noiseGain.gain.setValueAtTime(peak, now + Math.max(0.06, burst - 0.08));
+      noiseGain.gain.linearRampToValueAtTime(0, now + burst);
+      src.start(now);
+      src.stop(now + burst + 0.05);
 
       onGlitch(durationSec);
     },
@@ -132,6 +189,15 @@ export default function GlitchEffect() {
   const glitchActiveRef = useRef(false);
 
   const { interrupt } = useGlitchAudio(integrity, () => {});
+
+  // Hold the latest interrupt in a ref so the scheduler effect below doesn't
+  // list it as a dependency. Otherwise it gets a new identity every render and
+  // tears down/restarts the scheduler on each glitch, cutting every glitch to a
+  // single frame while the audio plays its full duration.
+  const interruptRef = useRef(interrupt);
+  useEffect(() => {
+    interruptRef.current = interrupt;
+  });
 
   // Our own glitch scheduler — drives both visual + audio in lockstep
   useEffect(() => {
@@ -153,12 +219,19 @@ export default function GlitchEffect() {
         setGlitchType(type);
         glitchActiveRef.current = true;
         setGlitchActive(true);
-        interrupt(durationSec);
+        interruptRef.current(durationSec, type);
+
+        const headings = UI_TEXT.glitch.headings;
+        const messages = UI_TEXT.glitch.messages[type];
+        const heading = headings[Math.floor(Math.random() * headings.length)];
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        useWorldStore.getState().setGlitch(true, heading, message);
 
         t2 = setTimeout(() => {
           if (cancelled) return;
           glitchActiveRef.current = false;
           setGlitchActive(false);
+          useWorldStore.getState().setGlitch(false);
           scheduleNext();
         }, durationMs);
       }, delay);
@@ -171,8 +244,9 @@ export default function GlitchEffect() {
       clearTimeout(t2);
       glitchActiveRef.current = false;
       setGlitchActive(false);
+      useWorldStore.getState().setGlitch(false);
     };
-  }, [integrity, interrupt]);
+  }, [integrity]);
 
   const s = Math.max(0.01, (100 - integrity) / 100); // 0→1 as world breaks
 

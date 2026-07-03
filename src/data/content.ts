@@ -105,6 +105,27 @@ export const UI_TEXT = {
     mobile: "DRAG TO ORBIT · PINCH TO ZOOM · TAP NODES TO TUNE",
   },
 
+  glitch: {
+    headings: ["SIGNAL UNSTABLE", "TRANSMISSION FAULT", "RECEPTION ERROR"],
+    messages: {
+      tear: [
+        "signal tear // realigning frame",
+        "horizontal desync // frame slipping",
+        "raster fault // rebuilding scanlines",
+      ],
+      split: [
+        "chroma desync // channels separating",
+        "rgb drift // color planes diverging",
+        "phase split // signal doubling",
+      ],
+      static: [
+        "packet loss // noise flooding the channel",
+        "carrier lost // static washing in",
+        "bit rot // data dissolving to noise",
+      ],
+    },
+  },
+
   zoneLabels: {
     origin: {
       restored: "[ORIGIN — SIGNAL LOCKED]",

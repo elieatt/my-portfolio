@@ -7,6 +7,9 @@ interface WorldState {
   repairedZones: Set<ZoneId>;
   activeZone: ZoneId | null;
   integrity: number; // 0-100
+  glitching: boolean;
+  glitchHeading: string;
+  glitchLabel: string;
   easterEggFound: boolean;
   lastRepaired: ZoneId | null;
   pendingRepair: ZoneId | null;
@@ -18,6 +21,7 @@ interface WorldState {
   clearLastRepaired: () => void;
   setActiveZone: (id: ZoneId | null) => void;
   findEasterEgg: () => void;
+  setGlitch: (active: boolean, heading?: string, label?: string) => void;
   openRepairTerminal: (id: ZoneId) => void;
   closeRepairTerminal: () => void;
 }
@@ -28,6 +32,9 @@ export const useWorldStore = create<WorldState>((set) => ({
   repairedZones: new Set(),
   activeZone: null,
   integrity: 0,
+  glitching: false,
+  glitchHeading: "",
+  glitchLabel: "",
   easterEggFound: false,
   lastRepaired: null,
   pendingRepair: null,
@@ -41,6 +48,9 @@ export const useWorldStore = create<WorldState>((set) => ({
       repairedZones: new Set(),
       activeZone: null,
       integrity: 0,
+      glitching: false,
+      glitchHeading: "",
+      glitchLabel: "",
       easterEggFound: false,
       lastRepaired: null,
       pendingRepair: null,
@@ -60,6 +70,8 @@ export const useWorldStore = create<WorldState>((set) => ({
   clearLastRepaired: () => set({ lastRepaired: null }),
   setActiveZone: (id) => set({ activeZone: id }),
   findEasterEgg: () => set({ easterEggFound: true }),
+  setGlitch: (active, heading = "", label = "") =>
+    set({ glitching: active, glitchHeading: heading, glitchLabel: label }),
   openRepairTerminal: (id) => set({ pendingRepair: id }),
   closeRepairTerminal: () => set({ pendingRepair: null }),
 }));
