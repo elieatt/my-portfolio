@@ -188,6 +188,68 @@ export const RESTORATION_LINES = [
   "> — E.A.",
 ];
 
+export const INNER_WORLD_TEXT = {
+  restorationOverlay: {
+    enterButton: "[ ENTER THE TRANSMISSION ]",
+    stayButton: "[ STAY ON THE SURFACE ]",
+  },
+  topBar: {
+    title: "INSIDE THE TRANSMISSION",
+    returnButton: "[ RETURN TO SURFACE ]",
+  },
+  hud: {
+    enterButton: "[ ENTER TRANSMISSION ]",
+  },
+  panel: {
+    postHeader: "TRANSMISSION LOG",
+    projectHeader: "ARTIFACT — PROJECT",
+    experienceHeader: "ARTIFACT — RECORD",
+    contactHeader: "ARTIFACT — CHANNEL",
+    readLink: "[ READ → ]",
+    githubLink: "[ GITHUB → ]",
+  },
+  artifacts: {
+    contactLabel: "CONTACT",
+    loadingPosts: "> LOADING TRANSMISSION LOGS...",
+  },
+};
+
+export const TRACE_TEXT = {
+  coreLabel: "[ TRACE THE SOURCE ]",
+  coreLabelDone: "[ SOURCE TRACED — REOPEN CHANNEL ]",
+  makeContact: "[ MAKE CONTACT ]",
+  emailSubject: "RE: TRANSMISSION RECEIVED",
+  linkedinLabel: "[ LINKEDIN → ]",
+  githubLabel: "[ GITHUB → ]",
+  closeChannel: "[ CLOSE CHANNEL ]",
+};
+
+export const SOURCE_TRACE_LINES = [
+  "> TRACING SIGNAL PATH...",
+  "> HOP 0: HOMS, SYRIA",
+  "  2018 — B.Sc. Software Engineering, Al-Baath University",
+  "  learned to build while everything around was breaking",
+  "> HOP 1: HOMS — FIRST PRODUCTION SYSTEMS",
+  "  2023 — backend engineer. form automation, integration engines",
+  "> HOP 2: REMOTE — RIYADH",
+  "  2025 — legal SaaS. financial systems, auth, scheduling",
+  "> HOP 3: GERMANY",
+  "  2026 — relocated. new country, new language, same signal",
+  "> SOURCE LOCATED.",
+  "",
+  "  The broken world you repaired was never the code.",
+  "  It was distance. Noise. Static between a sender",
+  "  and anyone willing to tune in.",
+  "",
+  "  You tuned in.",
+  "",
+  "> CHANNEL OPEN — AWAITING RESPONSE",
+];
+
+// Inserted after "> SOURCE LOCATED." when the easter egg was found (this or a past session):
+export const SOURCE_TRACE_BONUS_LINE =
+  "  [FREQUENCY LOG RECOGNIZED — you found what most receivers miss]";
+
 export const EASTER_EGG_LINES = [
   "> ENCRYPTED CHANNEL DETECTED",
   "> TRIANGULATING FREQUENCY...",
@@ -214,6 +276,22 @@ export const BOOT_LINES = [
   "> WARNING: SIGNAL FRAGMENTED ACROSS 4 NODES",
   "> RECEPTION STRENGTH: 0%",
   "> AWAITING TUNING SEQUENCE...",
+];
+
+export const RETURN_BOOT_LINES = (
+  daysAgo: number,
+  visitCount: number,
+  savedIntegrity: number
+) => [
+  "> SIGNAL RECEIVER ONLINE...",
+  "> SCANNING FREQUENCY BANDS...",
+  "> RECEIVER RECOGNIZED",
+  `> LAST CONTACT: ${daysAgo === 0 ? "TODAY" : daysAgo === 1 ? "YESTERDAY" : `${daysAgo} DAYS AGO`}`,
+  `> SESSIONS LOGGED: ${visitCount}`,
+  `> SIGNAL MEMORY RESTORED — RECEPTION: ${savedIntegrity}%`,
+  savedIntegrity === 100
+    ? "> ALL NODES HOLDING. WELCOME BACK."
+    : "> REMAINING NODES AWAIT TUNING...",
 ];
 
 export const ZONES = [

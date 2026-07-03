@@ -1,11 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BOOT_LINES, UI_TEXT } from "@/data/content";
+import { BOOT_LINES, RETURN_BOOT_LINES, UI_TEXT } from "@/data/content";
 import { useWorldStore } from "@/store/worldStore";
+// Experimental — see components/persistence/config.ts
+import { PERSISTENCE_ENABLED } from "@/components/persistence/config";
+import { useMemoryStore } from "@/components/persistence/memoryStore";
 
 export default function BootSequence() {
   const setBootDone = useWorldStore((s) => s.setBootDone);
+  const restored = useMemoryStore((s) => s.restored);
+  const memDaysAgo = useMemoryStore((s) => s.daysAgo);
+  const memVisitCount = useMemoryStore((s) => s.visitCount);
+  const memSavedIntegrity = useMemoryStore((s) => s.savedIntegrity);
+  // Computed once on mount — by the time BootSequence renders, MemoryLoader
+  // has already hydrated the memory store (it mounts during the StartScreen
+  // phase, before the user can reach BootSequence).
+  const [lines] = useState<string[]>(() =>
+    PERSISTENCE_ENABLED && restored
+      ? RETURN_BOOT_LINES(memDaysAgo, memVisitCount, memSavedIntegrity)
+      : BOOT_LINES
+  );
   const [visibleLines, setVisibleLines] = useState<string[]>([]);
   const [currentLine, setCurrentLine] = useState("");
   const [lineIndex, setLineIndex] = useState(0);
@@ -14,7 +29,7 @@ export default function BootSequence() {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    if (lineIndex >= BOOT_LINES.length) {
+    if (lineIndex >= lines.length) {
       setTimeout(() => {
         setFadeOut(true);
         setTimeout(() => {
@@ -25,7 +40,7 @@ export default function BootSequence() {
       return;
     }
 
-    const line = BOOT_LINES[lineIndex];
+    const line = lines[lineIndex];
 
     if (charIndex < line.length) {
       const delay = line.startsWith(">") ? 30 : 20;
@@ -35,7 +50,7 @@ export default function BootSequence() {
       }, delay);
       return () => clearTimeout(t);
     } else {
-      const pause = lineIndex === BOOT_LINES.length - 1 ? 600 : 180;
+      const pause = lineIndex === lines.length - 1 ? 600 : 180;
       const t = setTimeout(() => {
         setVisibleLines((prev) => [...prev, line]);
         setCurrentLine("");
@@ -44,7 +59,7 @@ export default function BootSequence() {
       }, pause);
       return () => clearTimeout(t);
     }
-  }, [lineIndex, charIndex, setBootDone]);
+  }, [lineIndex, charIndex, setBootDone, lines]);
 
   if (done) return null;
 
