@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useWorldStore } from "@/store/worldStore";
 import { UI_TEXT } from "@/data/content";
 import type { ZoneId } from "@/data/content";
+import { MINIGAMES_ENABLED } from "@/components/minigames/config";
+import { useMiniGameStore } from "@/components/minigames/miniGameStore";
 
 const COMMAND = (id: ZoneId) => `tune ${id}`;
 const TYPEWRITER_MS = 45;
@@ -15,6 +17,7 @@ export default function RepairTerminal() {
   const repairZone = useWorldStore((s) => s.repairZone);
   const closeRepairTerminal = useWorldStore((s) => s.closeRepairTerminal);
   const integrity = useWorldStore((s) => s.integrity);
+  const startMiniGame = useMiniGameStore((s) => s.start);
 
   useEffect(() => {
     if (integrity >= 100) closeRepairTerminal();
@@ -74,7 +77,16 @@ export default function RepairTerminal() {
     setConfirmed(true);
 
     closeRepairTerminal(); // frame 1: terminal gone
-    setTimeout(() => repairZone(zoneId), 300); // frame 2: flash fires on clear screen
+    const repair = () => repairZone(zoneId);
+
+    // Experimental: gate the repair behind a mini-game. Flip MINIGAMES_ENABLED
+    // off (in minigames/config.ts) to restore the instant repair below.
+    if (MINIGAMES_ENABLED) {
+      const level = Math.round(integrity / 25); // nodes already tuned (0-3)
+      setTimeout(() => startMiniGame(repair, level), 300);
+    } else {
+      setTimeout(repair, 300); // frame 2: flash fires on clear screen
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
