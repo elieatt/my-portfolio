@@ -11,7 +11,9 @@ export default function StartScreen() {
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    if (!gameStarted) setFading(false);
+    if (gameStarted) return;
+    const t = setTimeout(() => setFading(false), 0); // async — avoids sync setState in effect
+    return () => clearTimeout(t);
   }, [gameStarted]);
 
   if (gameStarted) return null;
